@@ -27,3 +27,26 @@ const CartSchema = new Schema({
     }]
 });
 module.exports.Cart = mongoose.model('Cart', CartSchema);
+
+
+const CouponSchema = new Schema({
+    couponCode: String,
+    discountPercent: Number
+});
+module.exports.Coupon = mongoose.model('Coupon', CouponSchema);
+
+
+const OrderSchema = new Schema({
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: "User"
+    },
+    productId: {
+        type: Schema.Types.ObjectId,
+        ref: "Product"
+    },
+    couponCode: String,
+    orderNo: Number,
+    price: Number
+});
+module.exports.Order = mongoose.model('Order', OrderSchema);
