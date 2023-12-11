@@ -5,6 +5,7 @@ const models = require("./models");
 
 const Cart = models.Cart;
 const Order = models.Order;
+const Coupon = models.Coupon;
 const app = express();
 const port = 3000;
 const applyCouponOrderNo = 10;
@@ -29,10 +30,13 @@ app.post("/ecommerce/checkout", async (req, res) => {
     const price = req.body.price;
 
     // Coupon Code Validation
-    const orders = await Order.find({ userId }, { orderNo: 1 });
-    const latestOrderNo = Math.max(...orders.map(o => o.orderNo));
-    if (couponCode && ((latestOrderNo + 1) % applyCouponOrderNo) != 0)
-        res.status(404).json({ message: "Coupon Code caanot be applied!" });
+    if (couponCode) {
+        const couponObj = await Coupon.find({ couponCode });
+        const orders = await Order.find({ userId }, { orderNo: 1 });
+        const latestOrderNo = Math.max(...orders.map(o => o.orderNo));
+        if (couponObj && ((latestOrderNo + 1) % applyCouponOrderNo) != 0)
+            res.status(404).json({ message: "Coupon Code caanot be applied!" });
+    }
 
     // Create new order
     const newOrderObj = new Order({ userId, productId, couponCode, price, orderNo: latestOrderNo + 1 });
