@@ -47,6 +47,7 @@ const OrderSchema = new Schema({
     },
     couponCode: String,
     orderNo: Number,
-    price: Number
+    priceWithDiscount: Number,
+    priceWithoutDiscount: Number
 });
 module.exports.Order = mongoose.model('Order', OrderSchema);
