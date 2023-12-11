@@ -53,8 +53,22 @@ app.post("/ecommerce/checkout", async (req, res) => {
 });
 
 
-app.get("/ecommerce/admin/purchases", (req, res) => {
+app.get("/ecommerce/admin/purchases", async (req, res) => {
+    const orders = await Order.find();
+    let totAmt = 0;
+    let couponCodes = new Set();
+    let totDiscountAmt = 0;
+    for (order of orders) {
+        totAmt += order.priceWithDiscount;
+        if (order.couponCode) 
+            couponCodes.add(order.couponCode)
+        totDiscountAmt += (order.priceWithoutDiscount - order.priceWithDiscount)
+    }
+    couponCodes = new Array(...couponCodes);
 
+    res.status(200).json({
+        orders, totAmt, couponCodes, totDiscountAmt
+    })
 });
 
 
