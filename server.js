@@ -8,12 +8,13 @@ const Order = models.Order;
 const Coupon = models.Coupon;
 const app = express();
 const port = 3000;
-const applyCouponOrderNo = 1;
+const applyCouponOrderNo = 10;
 
 
 app.use(express.json());
 
 
+// Endpoints
 app.put("/ecommerce/cart", async (req, res) => {
     const userId = req.body.userId;
     const productId = req.body.productId;
@@ -72,6 +73,7 @@ app.get("/ecommerce/admin/purchases", async (req, res) => {
 });
 
 
+// MongoDB Connection
 mongoose.connect("mongodb://localhost:27017/uniblox", {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -84,6 +86,7 @@ db.once("open", () => {
 })
 
 
+// Server connection
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
